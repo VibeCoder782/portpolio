@@ -46,7 +46,7 @@ const Chatbot = ({ isOpen, onClose }) => {
       const res = await fetch("/api/chat", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-          model:"claude-sonnet-4-5", max_tokens:1000,
+          max_tokens:1000,
           system:`당신은 양순민의 포트폴리오 AI 어시스턴트입니다. 아래 프로필 정보를 바탕으로 친절하고 간결하게 한국어로 답변하세요. 3~5문장 이내. 프로필에 없는 내용은 "해당 정보는 포트폴리오에 포함되어 있지 않습니다"라고 안내.\n\n${PROFILE}`,
           messages: newMsgs.map(m => ({ role:m.role, content:m.content })),
         }),
