@@ -52,8 +52,16 @@ const Chatbot = ({ isOpen, onClose }) => {
         }),
       });
       const data = await res.json();
-      setMessages(p => [...p, { role:"assistant", content:data.content?.map(c=>c.text||"").join("")||"응답을 가져오지 못했습니다." }]);
-    } catch { setMessages(p => [...p, { role:"assistant", content:"네트워크 오류가 발생했습니다. 다시 시도해 주세요." }]); }
+      if (!res.ok) {
+        console.error("[chat] API error:", res.status, data);
+        setMessages(p => [...p, { role:"assistant", content:`오류가 발생했습니다. (${res.status})` }]);
+      } else {
+        setMessages(p => [...p, { role:"assistant", content:data.content?.map((c: {text?:string})=>c.text||"").join("")||"응답을 가져오지 못했습니다." }]);
+      }
+    } catch(e) {
+      console.error("[chat] fetch error:", e);
+      setMessages(p => [...p, { role:"assistant", content:"네트워크 오류가 발생했습니다. 다시 시도해 주세요." }]);
+    }
     setLoading(false);
   };
 
